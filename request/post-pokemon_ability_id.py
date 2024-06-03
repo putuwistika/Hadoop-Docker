@@ -1,7 +1,7 @@
 import requests
 
 
-url = "http://47.237.106.32:8000/pokemon_effect/"
+url = "http://localhost:8000/pokemon_effect/"
 
 
 for pokemon_ability_id in range(1,1000):

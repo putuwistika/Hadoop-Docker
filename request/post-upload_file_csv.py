@@ -1,7 +1,7 @@
 import requests
 
 
-url = "http://47.237.106.32:8000/upload/"
+url = "http://localhost:8000/upload/"
 
 
 file_path = "/Users/putuwistika/Documents/5. Data Engginer/PostgreSQL/mpcn2_nilai/mahasiswa.csv"
