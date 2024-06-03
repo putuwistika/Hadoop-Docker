@@ -1,0 +1,8 @@
+# Dev environment
+fastapi
+uvicorn
+pydantic
+requests
+asyncpg
+hdfs
+pandas

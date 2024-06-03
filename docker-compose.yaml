@@ -1,0 +1,69 @@
+version: "3"
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=pokemon
+      - POSTGRES_PASSWORD=Dev1!
+      - POSTGRES_DB=pokemon_db
+    ports:
+      - "2102:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  poke-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: poke-api
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://pokemon:Dev1!@postgres:5432/pokemon_db
+    ports:
+      - "8000:8000"
+
+  namenode:
+    image: apache/hadoop:3.3.5
+    container_name: namenode
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    ports:
+      - 9870:9870
+    env_file:
+      - ./config
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+
+  datanode:
+    image: apache/hadoop:3.3.5
+    container_name: datanode
+    command: ["hdfs", "datanode"]
+    env_file:
+      - ./config      
+
+  resourcemanager:
+    image: apache/hadoop:3.3.5
+    container_name: resourcemanager
+    hostname: resourcemanager
+    command: ["yarn", "resourcemanager"]
+    ports:
+      - 8088:8088
+    env_file:
+      - ./config
+    volumes:
+      - ./test.sh:/opt/test.sh
+
+  nodemanager:
+    image: apache/hadoop:3.3.5
+    container_name: nodemanager
+    command: ["yarn", "nodemanager"]
+    env_file:
+      - ./config
+
+volumes:
+  postgres_data:
+
